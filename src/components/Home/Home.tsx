@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@mui/material';
 import drone_image from '../../assets/images/sample_drone_image.jpg';
+import { Link } from 'react-router-dom'
 
 interface Props{
     title: string;
@@ -68,20 +69,24 @@ export const Home = ( props:Props ) =>{
         <div className={classes.root}>
             <nav>
                 <div className={classes.navbar_container}>
+
                     <h1 className={ `${classes.logo}` }>
                         <a href="#" className={ `${classes.logo_a} ${classes.logo_navigation}` }>Car Inventory</a>
                     </h1>
 
                     <ul className={`${classes.navigation} ${classes.logo_navigation}`}>
                         <li>
-                            <a href=""className={classes.nav_a}>Home</a>
+                            <Link to='/' className={classes.nav_a}>Home</Link>
                         </li>
+
                         <li>
-                            <a href=""className={classes.nav_a}>About</a>
+                            <Link to='/dashboard' className={classes.nav_a}>Dashboard</Link>
                         </li>
+
                         <li>
-                            <a href=""className={classes.nav_a}>Learn More</a>
+                            <Link to='/signin' className={classes.nav_a}>Sign In</Link>
                         </li>
+
                     </ul>
                 </div>
             </nav>
