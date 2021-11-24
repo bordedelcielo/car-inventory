@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Drawer as MUIDrawer,
     ListItem,
     List,
     ListItemIcon,
     ListItemText,
     Theme,
-    useTheme,
+    // useTheme,
     AppBar,
     Toolbar,
     IconButton,
@@ -16,13 +16,12 @@ import { Drawer as MUIDrawer,
     ThemeProvider,
 
 } from '@mui/material';
-import { makeStyles, createStyles } from '@mui/styles'
+import { makeStyles, useTheme, withStyles, createStyles } from '@mui/styles'
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeft from '@mui/icons-material/ChevronLeft';
-import ChevronRight from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import clsx from 'clsx';
 import { RouteComponentProps, withRouter, Switch, Route } from 'react-router-dom';
-import { HeadsetMic } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawer: {
             width: drawerWidth,
-            flexString: 0 //Terrell typed 'flexShring'. Maybe that was on purpose?
+            flexShrink: 0 //Terrell typed 'flexShring'. Maybe that was on purpose? Now he's saying it's flexShrink?
         },
         drawerPaper:{
             width: drawerWidth
@@ -98,9 +97,81 @@ interface DashProps{
 
 export const Dashboard = withRouter(( props:DashProps ) => {
     console.log(props)
+    const { history } = props;
+    const classes = useStyles();
+    const theme = useTheme();
+    const [open, setOpen] = useState(false);
+
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    }
+
+    const handleDrawerClose = () => {
+        setOpen(false);
+    }
+        
+    const itemsList = [
+        {
+            text: 'Home',
+            onClick: () => history.push('/')
+        },
+        {
+            text: 'Sign In',
+            onClick: () => history.push('/signin')
+        }
+    ]
+
     return(
-        <div>
-            <h1>Dashboard 📊</h1>
+        <div className={classes.root}>
+            <CssBaseline />
+            <AppBar position='fixed' className={clsx(classes.appBar, {
+                [classes.appBarShift]: open
+            })}
+            >
+                <Toolbar className={classes.toolbar}>
+                    <IconButton color='inherit' aria-label='open drawer' onClick={handleDrawerOpen}
+                        edge='start' className={clsx(classes.menuButton, open && classes.hide)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant='h6' noWrap>
+                        Dashboard
+                    </Typography>
+                    <Button className={classes.toolbar_button}> Create New Car</Button>
+                </Toolbar>
+            </AppBar>
+            <MUIDrawer
+                className={classes.drawer} variant='persistent' anchor='left' open={open}
+                classes={{
+                    paper: classes.drawerPaper
+                }}
+            >
+                <div className={classes.drawerHeader}>
+                    <IconButton onClick={handleDrawerClose}>
+                        <ChevronLeftIcon/>
+                        {/* {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />} */}
+                    </IconButton>
+                </div>
+                <Divider />
+                <List>
+                    {itemsList.map((item,index) =>{
+                        const {text, onClick } = item;
+                        return(
+                            <ListItem button key={text} onClick={onClick}>
+                                <ListItemText primary={text} />
+                            </ListItem>
+                        );
+                    })}
+                </List>
+            </MUIDrawer>
+
+            <main className={clsx(classes.content, {
+                [classes.contentShift]: open
+            })}>
+
+                <div className={classes.drawerHeader}></div>
+                <h1>Dashboard 📊 needs some data later</h1>          
+            </main>
         </div>
     )
 })
