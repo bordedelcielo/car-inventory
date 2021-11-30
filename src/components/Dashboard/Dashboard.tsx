@@ -13,15 +13,21 @@ import { Drawer as MUIDrawer,
     Divider,
     Button,
     CssBaseline,
-    ThemeProvider,
+    ThemeProvider, //optional?
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
 
 } from '@mui/material';
-import { makeStyles, useTheme, withStyles, createStyles } from '@mui/styles'
+import { makeStyles, useTheme, withStyles, styled, createStyles } from '@mui/styles' //if you have issues, erase "styled" and/or "withStyles"
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import clsx from 'clsx';
 import { RouteComponentProps, withRouter, Switch, Route } from 'react-router-dom';
+import { DataTable, CarForm } from '../../components';
 
 const drawerWidth = 240;
 
@@ -31,21 +37,21 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex'
         },
         appBar:{
-            transition: theme.transitions.create(['margin', 'width'], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen
-            }),
+            // transition: theme.transitions.create(['margin', 'width'], {
+            //     easing: theme.transitions.easing.sharp,
+            //     duration: theme.transitions.duration.leavingScreen
+            // }),
         },
         appBarShift: {
             width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
-            transition: theme.transitions.create(['margin', 'width'], {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen
-            })
+            // transition: theme.transitions.create(['margin', 'width'], {
+            //     easing: theme.transitions.easing.easeOut,
+            //     duration: theme.transitions.duration.enteringScreen
+            // })
         },
         menuButton: {
-            marginRight: theme.spacing(2)
+            // marginRight: theme.spacing(2) // problematic?
         },
         hide: {
             display: 'none'
@@ -60,24 +66,24 @@ const useStyles = makeStyles((theme: Theme) =>
         drawerHeader: {
             display: 'flex',
             alignItems: 'center',
-            padding: theme.spacing(0, 1),
-            ...theme.mixins.toolbar,
+            // padding: theme.spacing(0, 1), // problematic?
+            // ...theme.mixins.toolbar, // problematic?
             justifyContent: 'flex-end'
         },
         content: {
             flexGrow: 1,
-            padding: theme.spacing(3),
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen
-            }),
+            padding: 80,
+            // transition: theme.transitions.create('margin', {
+            //     easing: theme.transitions.easing.sharp,
+            //     duration: theme.transitions.duration.leavingScreen
+            // }),
             marginLeft: -drawerWidth
         },
         contentShift: {
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen
-            }),
+            // transition: theme.transitions.create('margin', {
+            //     easing: theme.transitions.easing.easeOut,
+            //     duration: theme.transitions.duration.enteringScreen
+            // }),
             marginLeft: 0
         },
         toolbar: {
@@ -99,8 +105,9 @@ export const Dashboard = withRouter(( props:DashProps ) => {
     console.log(props)
     const { history } = props;
     const classes = useStyles();
-    const theme = useTheme();
+
     const [open, setOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -108,6 +115,15 @@ export const Dashboard = withRouter(( props:DashProps ) => {
 
     const handleDrawerClose = () => {
         setOpen(false);
+    }
+
+    // Handle the dialog open/close
+    const handleDialogClickOpen = () => {
+        setDialogOpen(true);
+    }
+
+    const handleDialogClickClose = () => {
+        setDialogOpen(false);
     }
         
     const itemsList = [
@@ -137,7 +153,21 @@ export const Dashboard = withRouter(( props:DashProps ) => {
                     <Typography variant='h6' noWrap>
                         Dashboard
                     </Typography>
-                    <Button className={classes.toolbar_button}> Create New Car</Button>
+                    <Button className={classes.toolbar_button} onClick={handleDialogClickOpen} style={{ backgroundColor:'whitesmoke', marginLeft:'auto' }}> Create New Car</Button>
+                    
+                    {/* Dialog Popup begin */}
+                    <Dialog open={dialogOpen} onClose={handleDialogClickClose} aria-labelledby='form-dialog-title'>
+                        <DialogTitle id='form-dialog-title'> Add New Car
+
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>Fill out the Form to Add a Car!</DialogContentText>
+                            <CarForm/>
+                        </DialogContent>
+                        <DialogActions><Button onClick={handleDialogClickClose}>Cancel</Button>
+                        </DialogActions>
+                    </Dialog>
+                
                 </Toolbar>
             </AppBar>
             <MUIDrawer
@@ -170,7 +200,8 @@ export const Dashboard = withRouter(( props:DashProps ) => {
             })}>
 
                 <div className={classes.drawerHeader}></div>
-                <h1>Dashboard 📊 needs some data later</h1>          
+                <DataTable/>
+                {/* <h1>Dashboard 📊 needs some data later</h1>           */}
             </main>
         </div>
     )

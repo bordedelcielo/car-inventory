@@ -1,21 +1,23 @@
-// let token = `` // Placeholder token
+// export {}
+
+let token = `862d6638707afef4a5704048c50e39cdb078cc93345cddb3` // Car App token
 
 export const server_calls = {
     get: async () => {
-        const response = await fetch(`car_site/api/drones`, { // placecholder code
+        const response = await fetch(`http://localhost:5000/api/cars`, {
             method : 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': `Bearer ${token}`
             }
-        }); // Terrell's site
+        });
         if(!response.ok){
             throw new Error('Failed to fetch data from server')
         }
         return await response.json()
     },
     create: async (data: any = {}) => {
-        const response = await fetch(`car_site/api/drones`, { // placeholder code
+        const response = await fetch(`http://localhost:5000/api/cars`, { // placeholder code
             method : 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,7 +31,7 @@ export const server_calls = {
         return await response.json()
     },
     update: async (id:string, data: any = {}) => {
-        const response = await fetch(`car_site/api/drones/${id}`, {
+        const response = await fetch(`http://localhost:5000/api/cars/${id}`, {
             method : 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,7 +45,7 @@ export const server_calls = {
         return await response.json()
     },
     delete: async (id:string) => {
-        const response = await fetch(`car_site/api/drones/${id}`, {
+        const response = await fetch(`http://localhost:5000/api/cars/${id}`, {
             method : 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
